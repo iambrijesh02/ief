@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Destinations Carousel</title>
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Animate.css for animations -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #1a1a2e;
+      --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Destinations Section */
+    .destinations-section {
+      width: 100%;
+      padding: 80px 0;
+      background: #f8f9fa;
+    }
+
+    .destinations-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      letter-spacing: -0.5px;
+      margin-bottom: 1rem;
+    }
+
+    .destinations-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* Carousel Container */
+    .destinations-carousel-container {
+      position: relative;
+      padding: 2rem 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Custom carousel wrapper */
+    .custom-carousel {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      gap: 1.5rem;
+    }
+
+    /* Destination Item */
+    .destination-item {
+      flex-shrink: 0;
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+
+    /* Destination Card with image background */
+    .destination-card {
+      position: relative;
+      height: 360px;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .destination-card:hover {
+      transform: translateY(-12px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Background image for cards */
+    .destination-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .destination-card:hover .destination-image {
+      transform: scale(1.08);
+    }
+
+    /* Dark overlay for text visibility */
+    .destination-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+      transition: background 0.5s ease;
+    }
+
+    .destination-card:hover .destination-overlay {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+    }
+
+    /* Content positioning on card */
+    .destination-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 2rem 1.5rem;
+      color: white;
+      text-align: center;
+      transform: translateY(30px);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0.9;
+    }
+
+    .destination-card:hover .destination-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Destination name styling */
+    .destination-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+    }
+
+    /* Description text styling */
+    .destination-description {
+      font-size: 0.95rem;
+      margin: 0.5rem 0 1rem 0;
+      font-weight: 400;
+      opacity: 0.95;
+      transition: all 0.4s ease;
+    }
+
+    .destination-card:hover .destination-description {
+      transform: translateY(-5px);
+    }
+
+    /* Arrow link styling */
+    .destination-link {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      color: white;
+      font-size: 0.9rem;
+      transition: all 0.4s ease;
+      line-height: 40px;
+      text-decoration: none;
+    }
+
+    .destination-link:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateX(5px);
+      color: white;
+    }
+
+    /* Custom Carousel Controls */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.8;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      position: absolute;
+      z-index: 10;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+      opacity: 1;
+    }
+
+    .carousel-control-prev {
+      left: -60px;
+    }
+
+    .carousel-control-next {
+      right: -60px;
+    }
+
+    /* Carousel indicators */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .carousel-indicators button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background-color: var(--primary-color);
+      opacity: 0.5;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-indicators button.active {
+      opacity: 1;
+    }
+
+    /* Carousel slide animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Desktop: 4 cards per view */
+    @media (min-width: 1200px) {
+      .destination-item {
+        width: calc(25% - 1.125rem);
+      }
+      
+      .carousel-control-prev {
+        left: -60px;
+      }
+
+      .carousel-control-next {
+        right: -60px;
+      }
+    }
+
+    /* Tablet Large: 3 cards per view */
+    @media (max-width: 1199px) and (min-width: 992px) {
+      .destination-item {
+        width: calc(33.333% - 1rem);
+      }
+
+      .carousel-control-prev {
+        left: 10px;
+      }
+
+      .carousel-control-next {
+        right: 10px;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 40px;
+        height: 40px;
+      }
+
+      .destination-card {
+        height: 300px;
+      }
+
+      .destination-name {
+        font-size: 1.5rem;
+      }
+
+      .destination-description {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Tablet: 2 cards per view */
+    @media (max-width: 991px) and (min-width: 768px) {
+      .destination-item {
+        width: calc(50% - 0.75rem);
+      }
+
+      .carousel-control-prev {
+        left: 10px;
+      }
+
+      .carousel-control-next {
+        right: 10px;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 40px;
+        height: 40px;
+      }
+
+      .destination-card {
+        height: 300px;
+      }
+
+      .destination-name {
+        font-size: 1.5rem;
+      }
+
+      .destination-description {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Mobile: 1 card per view */
+    @media (max-width: 767px) {
+      .destination-item {
+        width: 100%;
+      }
+
+      .carousel-control-prev {
+        left: 10px;
+      }
+
+      .carousel-control-next {
+        right: 10px;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+      }
+
+      .destinations-title {
+        font-size: 2rem;
+      }
+
+      .destination-card {
+        height: 320px;
+      }
+
+      .destination-name {
+        font-size: 1.3rem;
+      }
+
+      .destination-description {
+        font-size: 0.8rem;
+        margin: 0.3rem 0 0.8rem 0;
+      }
+
+      .destination-content {
+        padding: 1.5rem 1rem;
+      }
+
+      .destinations-carousel-container {
+        padding: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Destinations Section -->
+  <section class="destinations-section py-5" id="destinations">
+    <div class="container-fluid">
+      <div class="text-center mb-5 animate__animated animate__fadeInDown">
+        <h2 class="destinations-title">Top Destinations</h2>
+        <p class="destinations-subtitle">
+          We serve students across the globe's most sought-after study locations
+        </p>
+      </div>
+
+      <!-- Carousel -->
+      <div class="destinations-carousel-container px-4">
+        <div class="custom-carousel">
+          <!-- Carousel wrapper for all items with smooth transform -->
+          <div class="carousel-wrapper" id="carouselWrapper">
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/usa_fr.jpg" alt="USA" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=USA'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">USA</h3>
+                  <p class="destination-description">12 months (24+ STEM OPT) | Top market wages.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/uk_fr.jpg" alt="United Kingdom" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=United+Kingdom'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">United Kingdom</h3>
+                  <p class="destination-description">2 years (3 for PhD) | 87.6% recent employment.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/can_fr.jpg" alt="Canada" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=Canada'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">Canada</h3>
+                  <p class="destination-description">Up to 3 years PGWP | 90% job success rate.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/aus_fr.jpg" alt="Australia" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=Australia'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">Australia</h3>
+                  <p class="destination-description">2-4 years PSWR | 87% graduate job market.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/eu_fr.jpg" alt="Europe" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=Europe'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">Europe</h3>
+                  <p class="destination-description">12-18 months (Job Seeker) | 87% Employability rate.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/nz_fr.jpg" alt="New Zealand" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=New+Zealand'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">New Zealand</h3>
+                  <p class="destination-description">1-3 year | 85% Employability rate.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+             <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/usa_fr.jpg" alt="USA" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=USA'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">USA</h3>
+                  <p class="destination-description">12 months (24+ STEM OPT) | Top market wages.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div class="destination-item">
+              <div class="destination-card">
+                <img src="images/uk_fr.jpg" alt="United Kingdom" class="destination-image" onerror="this.src='https://via.placeholder.com/400x360?text=United+Kingdom'">
+                <div class="destination-overlay"></div>
+                <div class="destination-content">
+                  <h3 class="destination-name">United Kingdom</h3>
+                  <p class="destination-description">2 years (3 for PhD) | 87.6% recent employment.</p>
+                  <a href="#" class="destination-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+
+          <!-- Carousel Controls -->
+          <button class="carousel-control-prev" id="prevBtn" type="button">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="carousel-control-next" id="nextBtn" type="button">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap 5.3 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom carousel JavaScript for multi-item display with responsive slides -->
+  <script>
+    class MultiItemCarousel {
+      constructor() {
+        this.wrapper = document.getElementById('carouselWrapper');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.indicatorsContainer = document.getElementById('carouselIndicators');
+        this.items = document.querySelectorAll('.destination-item');
+        this.currentSlide = 0;
+        this.itemsPerView = 4;
+        
+        this.init();
+      }
+
+      init() {
+        this.updateItemsPerView();
+        this.createIndicators();
+        this.attachEventListeners();
+        window.addEventListener('resize', () => this.handleResize());
+      }
+
+      updateItemsPerView() {
+        const width = window.innerWidth;
+        if (width < 768) {
+          this.itemsPerView = 1;
+        } else if (width < 992) {
+          this.itemsPerView = 2;
+        } else if (width < 1200) {
+          this.itemsPerView = 3;
+        } else {
+          this.itemsPerView = 4;
+        }
+        this.currentSlide = 0;
+        this.updateCarousel();
+      }
+
+      createIndicators() {
+        this.indicatorsContainer.innerHTML = '';
+        const totalSlides = Math.ceil(this.items.length / this.itemsPerView);
+        
+        for (let i = 0; i < totalSlides; i++) {
+          const btn = document.createElement('button');
+          btn.setAttribute('type', 'button');
+          btn.setAttribute('aria-label', `Slide ${i + 1}`);
+          if (i === 0) btn.classList.add('active');
+          btn.addEventListener('click', () => this.goToSlide(i));
+          this.indicatorsContainer.appendChild(btn);
+        }
+      }
+
+      attachEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+      }
+
+      updateCarousel() {
+        const offset = this.currentSlide * this.itemsPerView;
+        const translateValue = -offset * (100 / this.itemsPerView);
+        this.wrapper.style.transform = `translateX(${translateValue}%)`;
+
+        // Update indicators
+        const indicators = document.querySelectorAll('.carousel-indicators button');
+        indicators.forEach((btn, i) => {
+          btn.classList.toggle('active', i === this.currentSlide);
+        });
+      }
+
+      nextSlide() {
+        const totalSlides = Math.ceil(this.items.length / this.itemsPerView);
+        this.currentSlide = (this.currentSlide + 1) % totalSlides;
+        this.updateCarousel();
+      }
+
+      prevSlide() {
+        const totalSlides = Math.ceil(this.items.length / this.itemsPerView);
+        this.currentSlide = (this.currentSlide - 1 + totalSlides) % totalSlides;
+        this.updateCarousel();
+      }
+
+      goToSlide(index) {
+        this.currentSlide = index;
+        this.updateCarousel();
+      }
+
+      handleResize() {
+        const prevItemsPerView = this.itemsPerView;
+        this.updateItemsPerView();
+        if (prevItemsPerView !== this.itemsPerView) {
+          this.createIndicators();
+          this.updateCarousel();
+        }
+      }
+    }
+
+    // Initialize carousel when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      new MultiItemCarousel();
+    });
+  </script>
+</body>
+</html>
