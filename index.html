@@ -218,8 +218,32 @@
                             <div class="mb-2"><input type="text" placeholder="Name *" class="form-control form-control-modern"></div>
                             <div class="mb-2"><input type="tel" placeholder="Mobile Number *" class="form-control form-control-modern"></div>
                             <div class="mb-2"><input type="email" placeholder="Email ID *" class="form-control form-control-modern"></div>
+                            <div class="mb-3">
+                                <select class="form-control form-control form-control-modern country error" name="fcoi" aria-required="true" aria-invalid="true" style=" border-radius: 16px;">
+                                    <option selected="" disabled="">Preferred Country *</option>
+                                    <option value="13">Australia</option>
+                                    <option value="38">Canada</option>
+                                    <option value="157">New Zealand</option>
+                                    <option value="231">USA</option>
+                                    <option value="230">UK</option>
+                                    <option value="82">Germany</option>
+                                    <option value="196">Singapore</option>
+                                    <option value="217">Thailand</option>
+                                    <option value="74"> Finland</option>
+                                    <option value="205">Spain</option>
+                                    <option value="105">Ireland</option>
+                                    <option value="54"> Croatia</option>
+                                    <option value="135">Malta</option>
+                                    <option value="75">France</option>
+                                    <option value="107">Italy</option>
+                                    <option value="175">Poland</option>
+                                    <option value="212">Switzerland</option>
+                                    <option value="211">Sweden</option>
+                                </select><label id="fcoi-error" class="error" for="fcoi">Please select country</label>
+                            </div>
+
                              <div class="mb-2 col-12">
-                                <select name="intake" class="form-control" id="intake">
+                                <select name="intake" class="form-control form-control-modern" id="intake">
                                   <option selected disabled>Preferred Intake (*)</option>                
                                   <option value="January 2026">January 2026</option>  
                                   <option value="May 2026">May 2026</option>    
@@ -228,7 +252,7 @@
                                 </select>
                               </div>
                               <div class="mb-2">
-                                <select class="form-control" name="branch_id">
+                                <select class="form-control form-control-modern" name="branch_id">
                                   <option selected disabled>Nearest SIEC Office (*)</option>
                                   <option value="5">Chandigarh</option>
                                   <option value="482">Ludhiana - Passport Office</option>
